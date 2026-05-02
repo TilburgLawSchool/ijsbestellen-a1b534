@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script type="importmap">{"imports":{"react":"https://esm.sh/react@18.3.1","react-dom":"https://esm.sh/react-dom@18.3.1","react-dom/client":"https://esm.sh/react-dom@18.3.1/client","react/jsx-runtime":"https://esm.sh/react@18.3.1/jsx-runtime","react/jsx-dev-runtime":"https://esm.sh/react@18.3.1/jsx-dev-runtime","/node/buffer.mjs":"https://esm.sh/node/buffer.mjs"}}</script>
+<style>
+  html,body,#root{height:100%;margin:0}
+  body{font-family:ui-sans-serif,system-ui,-apple-system,sans-serif}
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  window.__MODULES__ = {"src/App.tsx":"import React, { useState } from \"react\";\n\ninterface Flavor {\n  id: number;\n  name: string;\n  emoji: string;\n  description: string;\n  price: number;\n}\n\nconst flavors: Flavor[] = [\n  { id: 1, name: \"Vanilla\", emoji: \"🍦\", description: \"Classic creamy vanilla\", price: 4.99 },\n  { id: 2, name: \"Chocolate\", emoji: \"🍫\", description: \"Rich chocolate delight\", price: 5.49 },\n  { id: 3, name: \"Strawberry\", emoji: \"🍓\", description: \"Sweet strawberry swirl\", price: 4.79 },\n  { id: 4, name: \"Mint Chocolate Chip\", emoji: \"🍃\", description: \"Cool mint with chocolate chips\", price: 5.99 },\n  { id: 5, name: \"Cookies & Cream\", emoji: \"🍪\", description: \"Crushed cookies in creamy vanilla\", price: 5.29 },\n  { id: 6, name: \"Rocky Road\", emoji: \"🌋\", description: \"Chocolate with marshmallows and nuts\", price: 5.79 },\n];\n\nconst App: React.FC = () => {\n  const [cart, setCart] = useState<Flavor[]>([]);\n  const [orderPlaced, setOrderPlaced] = useState(false);\n\n  const addToCart = (flavor: Flavor) => {\n    setCart([...cart, flavor]);\n  };\n\n  const placeOrder = () => {\n    setOrderPlaced(true);\n    setCart([]);\n  };\n\n  return (\n    <div className=\"min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-8\">\n      <div className=\"max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8\">\n        <h1 className=\"text-4xl font-bold text-center text-purple-800 mb-8\">Sweet Delights Ice Cream</h1>\n\n        <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8\">\n          {flavors.map((flavor) => (\n            <div key={flavor.id} className=\"bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow\">\n              <div className=\"flex items-center mb-2\">\n                <span role=\"img\" aria-label={flavor.name} className=\"text-4xl mr-2\">{flavor.emoji}</span>\n                <h2 className=\"text-xl font-semibold\">{flavor.name}</h2>\n              </div>\n              <p className=\"text-gray-600 mb-2\">{flavor.description}</p>\n              <div className=\"flex justify-between items-center\">\n                <span className=\"text-lg font-bold text-purple-600\">${flavor.price.toFixed(2)}</span>\n                <button\n                  onClick={() => addToCart(flavor)}\n                  className=\"bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition-colors\"\n                >\n                  Add to Cart\n                </button>\n              </div>\n            </div>\n          ))}\n        </div>\n\n        <div className=\"bg-gray-100 rounded-lg p-6 mb-8\">\n          <h2 className=\"text-2xl font-bold mb-4\">Your Cart</h2>\n          {cart.length === 0 ? (\n            <p className=\"text-gray-600\">Your cart is empty</p>\n          ) : (\n            <>\n              <ul className=\"divide-y divide-gray-200\">\n                {cart.map((item, index) => (\n                  <li key={index} className=\"py-2 flex justify-between items-center\">\n                    <div className=\"flex items-center\">\n                      <span role=\"img\" aria-label={item.name} className=\"text-2xl mr-2\">{item.emoji}</span>\n                      <span>{item.name}</span>\n                    </div>\n                    <span className=\"font-bold\">${item.price.toFixed(2)}</span>\n                  </li>\n                ))}\n              </ul>\n              <div className=\"mt-4 pt-4 border-t border-gray-200\">\n                <div className=\"flex justify-between items-center mb-4\">\n                  <span className=\"text-lg font-semibold\">Total:</span>\n                  <span className=\"text-xl font-bold text-purple-600\">\n                    ${cart.reduce((sum, item) => sum + item.price, 0).toFixed(2)}\n                  </span>\n                </div>\n                <button\n                  onClick={placeOrder}\n                  className=\"w-full bg-purple-600 text-white py-3 rounded-full hover:bg-purple-700 transition-colors font-bold text-lg\"\n                >\n                  Place Order\n                </button>\n              </div>\n            </>\n          )}\n        </div>\n\n        {orderPlaced && (\n          <div className=\"bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-8\">\n            <div className=\"flex items-center\">\n              <span role=\"img\" aria-label=\"checkmark\" className=\"text-xl mr-2\">✅</span>\n              <p className=\"font-bold\">Order Placed!</p>\n            </div>\n            <p>Your ice cream will be delivered in 30-45 minutes. Thank you for your order!</p>\n          </div>\n        )}\n\n        <div className=\"bg-purple-100 rounded-lg p-6\">\n          <h2 className=\"text-2xl font-bold mb-4\">Delivery Information</h2>\n          <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">\n            <div>\n              <h3 className=\"font-semibold mb-2\">Delivery Areas</h3>\n              <p className=\"text-gray-700\">We deliver to most areas within a 10-mile radius of our shop.</p>\n            </div>\n            <div>\n              <h3 className=\"font-semibold mb-2\">Delivery Fee</h3>\n              <p className=\"text-gray-700\">$3.99 for orders under $20, free delivery for orders $20 or more.</p>\n            </div>\n            <div>\n              <h3 className=\"font-semibold mb-2\">Delivery Time</h3>\n              <p className=\"text-gray-700\">30-45 minutes during peak hours, 45-60 minutes during off-peak hours.</p>\n            </div>\n            <div>\n              <h3 className=\"font-semibold mb-2\">Payment Options</h3>\n              <p className=\"text-gray-700\">Credit/debit cards, mobile payments, and cash (for in-store pickup).</p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  );\n};\n\nexport default App;","src/main.tsx":"import React from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App\";\n\nconst root = createRoot(document.getElementById(\"root\")!);\nroot.render(<App />);"};
+  window.__ENTRY__ = "src/main.tsx";
+  // Forward errors to parent for easier debugging.
+  window.addEventListener('error', (e) => {
+    try { parent.postMessage({ __preview_error: true, message: e.message, stack: e.error && e.error.stack }, '*'); } catch {}
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    try { parent.postMessage({ __preview_error: true, message: String(e.reason && e.reason.message || e.reason), stack: e.reason && e.reason.stack }, '*'); } catch {}
+  });
+</script>
+<script type="module">
+  // Transpile each TSX/TS/JSX file to plain JS via Sucrase, then rewrite relative imports
+  // to blob URLs and let the browser's native module loader do the rest. Bare specifiers
+  // (react, react-dom/client, react/jsx-runtime) resolve via the import map; unknown
+  // bare specifiers auto-rewrite to https://esm.sh/<spec>.
+  const { transform } = await import("https://esm.sh/sucrase@3.35.0/es2022/sucrase.bundle.mjs");
+  const sources = window.__MODULES__ || {};
+  if (!window.__MODULES__) {
+    document.body.innerHTML = '<pre style="padding:24px;font:13px ui-monospace,monospace;color:#b91c1c">Preview bootstrap failed: module map missing.</pre>';
+  }
+  const blobUrls = new Map();
+
+  function resolvePath(spec, fromPath) {
+    if (!spec.startsWith('.') && !spec.startsWith('/')) return null;
+    const fromDir = fromPath.split('/').slice(0, -1);
+    const parts = spec.replace(/^\//, '').split('/');
+    const stack = spec.startsWith('/') ? [] : [...fromDir];
+    for (const p of parts) {
+      if (p === '..') stack.pop();
+      else if (p !== '.' && p !== '') stack.push(p);
+    }
+    const base = stack.join('/');
+    const candidates = [base, base + '.tsx', base + '.ts', base + '.jsx', base + '.js',
+      base + '/index.tsx', base + '/index.ts', base + '/index.jsx', base + '/index.js'];
+    for (const c of candidates) if (sources[c] !== undefined) return c;
+    return null;
+  }
+
+  const importMapKeys = new Set(Object.keys(({"imports":{"react":"https://esm.sh/react@18.3.1","react-dom":"https://esm.sh/react-dom@18.3.1","react-dom/client":"https://esm.sh/react-dom@18.3.1/client","react/jsx-runtime":"https://esm.sh/react@18.3.1/jsx-runtime","react/jsx-dev-runtime":"https://esm.sh/react@18.3.1/jsx-dev-runtime","/node/buffer.mjs":"https://esm.sh/node/buffer.mjs"}}).imports));
+  function resolveSpec(spec, ownPath) {
+    // Relative/absolute: resolve to a project file (blob URL).
+    if (spec.startsWith('.') || spec.startsWith('/')) {
+      const r = resolvePath(spec, ownPath);
+      return r && blobUrls.has(r) ? blobUrls.get(r) : null;
+    }
+    // Bare specifier: leave it alone if covered by the import map; otherwise auto-rewrite to esm.sh.
+    if (importMapKeys.has(spec)) return null;
+    if (/^https?:\/\//.test(spec)) return null;
+    // CRITICAL: the leading-asterisk prefix on esm.sh marks ALL dependencies
+    // as external, forcing them through the host import map. This guarantees a
+    // single React instance and fixes "Minified React error #31".
+    // Docs: https://esm.sh (search "external all dependencies").
+    const sep = spec.includes('?') ? '&' : '?';
+    return 'https://esm.sh/' + '*' + spec + sep + 'target=es2022';
+  }
+  function rewriteSpecifiers(code, ownPath) {
+    const swap = (full, prefix, q, spec) => {
+      const url = resolveSpec(spec, ownPath);
+      return url ? prefix + q + url + q : full;
+    };
+    return code
+      .replace(/(from\s*)(['"])([^'"]+)\2/g, swap)
+      .replace(/(import\s*\(\s*)(['"])([^'"]+)\2/g, swap)
+      .replace(/(import\s+)(['"])([^'"]+)\2/g, swap);
+  }
+
+  try {
+    const transpiled = {};
+    for (const path of Object.keys(sources)) {
+      const isTS = /\.tsx?$/.test(path);
+      const isJSX = /\.(tsx|jsx)$/.test(path);
+      
+      const out = transform(sources[path], {
+        transforms: [isTS ? 'typescript' : null, isJSX ? 'jsx' : null].filter(Boolean),
+        jsxRuntime: 'automatic',
+        production: true,
+        filePath: path,
+      }).code;
+      transpiled[path] = out;
+    }
+
+    const order = [];
+    const visited = new Set();
+    const visiting = new Set();
+    function visit(path) {
+      if (visited.has(path) || visiting.has(path)) return;
+      visiting.add(path);
+      const code = transpiled[path] || '';
+      const re = /(?:from\s*|import\s*\(\s*|import\s+)['"]([^'"]+)['"]/g;
+      let m;
+      while ((m = re.exec(code)) !== null) {
+        const dep = resolvePath(m[1], path);
+        if (dep) visit(dep);
+      }
+      visiting.delete(path);
+      visited.add(path);
+      order.push(path);
+    }
+    for (const p of Object.keys(transpiled)) visit(p);
+
+    for (const path of order) {
+      const rewritten = rewriteSpecifiers(transpiled[path], path);
+      const blob = new Blob([rewritten], { type: 'text/javascript' });
+      blobUrls.set(path, URL.createObjectURL(blob));
+    }
+
+    const entryUrl = blobUrls.get(window.__ENTRY__);
+    if (!entryUrl) throw new Error('Entry not found: ' + window.__ENTRY__);
+    import(entryUrl).catch(err => {
+      document.body.innerHTML = '<pre style="padding:24px;font:13px ui-monospace,monospace;color:#b91c1c;white-space:pre-wrap">' + (err && err.stack || err) + '</pre>';
+    });
+  } catch (err) {
+    document.body.innerHTML = '<pre style="padding:24px;font:13px ui-monospace,monospace;color:#b91c1c;white-space:pre-wrap">' + (err && err.stack || err) + '</pre>';
+  }
+</script>
+</body>
+</html>
